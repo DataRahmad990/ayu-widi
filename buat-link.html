@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buat Link Undangan Ayu &amp; Widi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Cinzel:wght@400;500&family=Questrial&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#8C8460;--gold-d:#6E6748;--gold-l:#D9D2BC;--paper:#FBFAF7;--ink:#3B372F;--muted:#7A7365;--wa:#DCF8C6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Questrial,system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;padding:28px 18px 90px}
+.wrap{max-width:1080px;margin:0 auto}
+h1{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:clamp(1.7rem,5vw,2.4rem);line-height:1.15}
+.sub{color:var(--muted);font-size:.94rem;margin-top:.4em;max-width:62ch}
+h2{font-family:Cinzel,serif;font-size:.7rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+   color:var(--gold);margin:34px 0 12px;display:flex;align-items:center;gap:12px}
+h2::after{content:"";flex:1;height:1px;background:var(--gold-l)}
+label{display:block;font-family:Cinzel,serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.45em}
+input,textarea{width:100%;font:inherit;font-size:.95rem;padding:.75em 1em;border:1px solid var(--gold-l);
+  border-radius:12px;background:#fff;color:var(--ink)}
+input:focus,textarea:focus{outline:none;border-color:var(--gold)}
+textarea{resize:vertical;line-height:1.65}
+#names{min-height:150px}
+#tpl{min-height:330px;font-size:.9rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+.tip{font-size:.83rem;color:var(--muted);margin:-.15rem 0 .5rem;line-height:1.55}
+.tip b{color:var(--ink);font-family:ui-monospace,monospace}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+button{font:inherit;font-family:Cinzel,serif;cursor:pointer;padding:.75em 1.6em;border-radius:999px;
+  font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  border:1px solid var(--gold);background:var(--gold);color:#fff}
+button.ghost{background:transparent;color:var(--gold-d)}
+.chk{display:flex;align-items:center;gap:8px;font-size:.86rem;color:var(--muted);
+  font-family:Questrial,system-ui,sans-serif;letter-spacing:normal;text-transform:none;margin-bottom:0}
+.chk input{width:auto}
+/* pratinjau gaya gelembung WhatsApp */
+.wa{background:#E9E2D6;border-radius:16px;padding:16px}
+.bubble{background:var(--wa);border-radius:10px 2px 10px 10px;padding:12px 14px;font-size:.88rem;
+  line-height:1.6;white-space:pre-wrap;word-break:break-word;box-shadow:0 1px 2px rgba(0,0,0,.12);
+  max-height:520px;overflow-y:auto;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.bubble .lk{color:#1B7F63;text-decoration:underline;word-break:break-all}
+.bubble b{font-weight:700}
+.prev-card{background:#F5F2EC;border-radius:8px;padding:10px 12px;margin-bottom:8px;border-left:3px solid #25D366}
+.prev-card .t{font-weight:700;font-size:.84rem}
+.prev-card .d{font-size:.8rem;color:#667}
+.prev-card .u{font-size:.78rem;color:#889;margin-top:3px}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:.9rem}
+th{text-align:left;font-family:Cinzel,serif;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;
+  color:#fff;background:var(--gold-d);padding:.6rem .6rem}
+td{padding:.65rem .6rem;border-bottom:1px solid #EDE9DE;vertical-align:top}
+tr:nth-child(even) td{background:#F6F4EE}
+td.nm{font-family:"Cormorant Garamond",serif;font-size:1.05rem;white-space:nowrap}
+td.lk{word-break:break-all;color:var(--muted);font-size:.76rem}
+td.ac{white-space:nowrap;text-align:right}
+td.ac button{padding:.45em .95em;font-size:.55rem;letter-spacing:.12em;margin-left:5px}
+.hint{background:#EFEADC;border-left:3px solid var(--gold);padding:14px 18px;border-radius:0 10px 10px 0;
+  margin-top:26px;font-size:.87rem;line-height:1.65}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--gold);color:#fff;
+  padding:.7em 1.5em;border-radius:999px;font-family:Cinzel,serif;font-size:.62rem;letter-spacing:.18em;
+  text-transform:uppercase;opacity:0;pointer-events:none;transition:.35s;z-index:9}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Buat link undangan per tamu</h1>
+<p class="sub">Isi pesannya sama untuk semua orang. Yang berbeda cuma link-nya, dan nama tamu muncul sendiri
+begitu undangannya dibuka.</p>
+
+<h2>Alamat undangan</h2>
+<input id="base" value="https://ayu-widi.netlify.app/">
+
+<div class="grid2" style="margin-top:26px">
+  <div>
+    <h2 style="margin-top:0">Daftar nama tamu</h2>
+    <p class="tip">Satu nama per baris. Pakai <b>|</b> untuk memaksa pindah baris, tanda <b>&amp;</b> otomatis
+    turun sendiri ke barisnya.</p>
+    <textarea id="names">Theo
+Deni &amp; Pasangan
+Bapak Supriyanto|Sekeluarga
+Keluarga Besar Nasution</textarea>
+
+    <h2>Isi pesan</h2>
+    <p class="tip">Tanda <b>{link}</b> diganti otomatis. Kalau mau nama tamu ikut tertulis di pesan, tambahkan
+    <b>{nama}</b>.</p>
+    <textarea id="tpl"></textarea>
+
+    <div class="row">
+      <label class="chk"><input type="checkbox" id="plus" checked> Pakai tanda + sebagai pengganti spasi di link</label>
+    </div>
+    <div class="row">
+      <button id="go">Buat Link</button>
+      <button class="ghost" id="csv">Unduh CSV</button>
+      <button class="ghost" id="reset">Kembalikan Pesan Awal</button>
+    </div>
+  </div>
+
+  <div>
+    <h2 style="margin-top:0">Pratinjau di WhatsApp</h2>
+    <div class="wa">
+      <div class="bubble">
+        <div class="prev-card">
+          <div class="t">The Wedding of Ayu &amp; Widi</div>
+          <div class="d">Sabtu, 24 Oktober 2026 &middot; Ungaran - Semarang</div>
+          <div class="u">&#128279; ayu-widi.netlify.app</div>
+        </div>
+        <span id="prev"></span>
+      </div>
+    </div>
+    <p class="tip" style="margin-top:10px">Kotak abu di atas pesan itu pratinjau bawaan WhatsApp. Isinya sama
+    untuk semua tamu, tidak bisa dibedakan per orang.</p>
+  </div>
+</div>
+
+<div id="out"></div>
+
+<div class="hint">
+  <b>Cara pakai:</b> klik <b>Salin Pesan</b> di baris tamu, tempel di chat orang tersebut. Tombol <b>WA</b>
+  membuka WhatsApp dengan pesan sudah terisi, tinggal pilih kontaknya.
+  <br><br>
+  <b>Jangan mengetik link sendiri.</b> WhatsApp berhenti membaca link begitu ketemu spasi, jadi nama yang ada
+  spasinya akan terpotong. Link dari alat ini sudah disandikan, aman dikirim.
+</div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+/* ===================== GANTI ISI PESAN & ACARA DI SINI ===================== */
+const ACARA = {
+  mempelaiA : "Ayu Virtarini",
+  mempelaiB : "Widiansyah Maulana",
+  panggilan : "Ayu & Widi",
+  tanggal   : "Sabtu, 24 Oktober 2026",
+  akad      : "07.00 - 08.00 WIB",
+  resepsi   : "11.00 - 13.00 WIB",
+  tempat    : "The Wujil Resort & Conventions, Ungaran - Semarang",
+  alamat    : "Jl. Soekarno Hatta No.KM 25, RW.5, Setiggen, Wujil, Kec. Bergas, Kabupaten Semarang, Jawa Tengah",
+  maps      : "https://www.google.com/maps/search/?api=1&query=The+Wujil+Resort+%26+Conventions+Ungaran+Semarang"
+};
+
+const PESAN_AWAL = `Assalamu'alaikum warahmatullahi wabarakatuh.
+
+Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir pada pernikahan kami:
+
+*${ACARA.mempelaiA}*
+&
+*${ACARA.mempelaiB}*
+
+🗓️ ${ACARA.tanggal}
+🕐 AKAD: ${ACARA.akad}
+🕐 RESEPSI: ${ACARA.resepsi}
+📍 ${ACARA.tempat}
+${ACARA.alamat}
+
+🗺️ Lokasi di Google Maps:
+${ACARA.maps}
+
+Klik link undangan berikut:
+{link}
+
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila berkenan hadir dan memberikan doa restu.
+
+Atas perhatian serta doa baik yang diberikan, kami sampaikan terima kasih.
+
+Mohon konfirmasi kehadiran melalui form RSVP pada undangan.
+
+Wassalamu'alaikum warahmatullahi wabarakatuh.
+
+Kami yang berbahagia,
+🤍 ${ACARA.panggilan}`;
+/* ====================== BATAS GANTI ISI PESAN & ACARA ====================== */
+
+const $ = s => document.querySelector(s);
+let rows = [];
+
+function toast(m){
+  const t = $("#toast"); t.textContent = m; t.classList.add("on");
+  clearTimeout(t._); t._ = setTimeout(()=>t.classList.remove("on"), 1800);
+}
+
+function sandi(nama){
+  let u = encodeURIComponent(nama);
+  if($("#plus").checked) u = u.replace(/%20/g, "+");
+  return u;
+}
+
+function susun(){
+  let base = $("#base").value.trim();
+  if(base && !/[?&]$/.test(base)) base += base.includes("?") ? "&" : "?";
+  const tpl = $("#tpl").value;
+  rows = $("#names").value.split("\n").map(s=>s.trim()).filter(Boolean).map(nama=>{
+    const link = base + "to=" + sandi(nama);
+    const pesan = tpl.replace(/\{nama\}/g, nama.replace(/\|/g," ")).replace(/\{link\}/g, link);
+    return {nama, link, pesan};
+  });
+  gambar();
+  pratinjau();
+}
+
+function esc(t){ return t.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+function pratinjau(){
+  const contoh = rows[0];
+  const teks = contoh ? contoh.pesan : $("#tpl").value.replace(/\{link\}/g,"…").replace(/\{nama\}/g,"…");
+  let h = esc(teks)
+    .replace(/\*([^*\n]+)\*/g, "<b>$1</b>")                       // tebal ala WhatsApp
+    .replace(/(https?:\/\/\S+)/g, '<span class="lk">$1</span>');
+  $("#prev").innerHTML = h;
+}
+
+function gambar(){
+  $("#out").innerHTML = rows.length
+    ? `<table><thead><tr><th>Tamu</th><th>Link</th><th></th></tr></thead><tbody>` +
+      rows.map((r,i)=>`<tr><td class="nm">${esc(r.nama)}</td><td class="lk">${esc(r.link)}</td>
+        <td class="ac"><button class="ghost" data-c="${i}">Salin Pesan</button><button data-w="${i}">WA</button></td></tr>`).join("") +
+      `</tbody></table>` : "";
+}
+
+$("#go").onclick = ()=>{ susun(); if(rows.length) toast(rows.length + " link dibuat"); };
+$("#reset").onclick = ()=>{ $("#tpl").value = PESAN_AWAL; susun(); toast("Pesan dikembalikan"); };
+["#tpl","#names","#base"].forEach(s => $(s).addEventListener("input", susun));
+$("#plus").addEventListener("change", susun);
+
+document.addEventListener("click", e=>{
+  const c = e.target.closest("[data-c]"), w = e.target.closest("[data-w]");
+  if(c) navigator.clipboard.writeText(rows[c.dataset.c].pesan)
+        .then(()=>toast("Pesan tersalin")).catch(()=>toast("Gagal menyalin"));
+  if(w) open("https://wa.me/?text=" + encodeURIComponent(rows[w.dataset.w].pesan), "_blank");
+});
+
+$("#csv").onclick = ()=>{
+  if(!rows.length) return toast("Buat link dulu");
+  const q = s => '"' + String(s).replace(/"/g,'""') + '"';
+  const csv = "﻿" + ["Nama,Link"].concat(rows.map(r=>q(r.nama)+","+q(r.link))).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download = "link-undangan-ayu-widi.csv"; a.click(); URL.revokeObjectURL(a.href);
+  toast("CSV diunduh");
+};
+
+$("#tpl").value = PESAN_AWAL;
+susun();
+</script>
+</body>
+</html>

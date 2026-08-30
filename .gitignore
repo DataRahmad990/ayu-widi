@@ -1,0 +1,6 @@
+# catatan internal, tidak perlu ikut terbit
+STATE.md
+PANDUAN.md
+deploy.py
+netlify.json
+.DS_Store
