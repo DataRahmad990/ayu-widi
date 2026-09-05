@@ -296,6 +296,21 @@ body::before{
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.5)}70%{box-shadow:0 0 0 20px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
 
 /* ==========================================================================
+   AMPLOP DIGITAL
+   ========================================================================== */
+.bank{border:1px solid var(--gold-lt);border-radius:44px 44px 12px 12px;padding:1.9rem 1.3rem 1.5rem;
+  margin-top:14px;background:rgba(255,255,255,.62);text-align:center}
+.bank .bn{font-family:var(--ff-caps);font-size:.6rem;font-weight:500;letter-spacing:.24em;
+  text-indent:.24em;text-transform:uppercase;color:var(--gold)}
+.bank .no{font-family:var(--ff-serif);font-weight:400;font-size:1.6rem;color:var(--gold-dp);
+  letter-spacing:.06em;margin:.4em 0 .15em;
+  font-variant-numeric:lining-nums tabular-nums;font-feature-settings:"lnum" 1,"tnum" 1}
+.bank .an{font-size:.86rem;color:var(--text-lt)}
+.bank .btn{margin-top:1.1rem}
+.addr{margin-top:2rem;text-align:center}
+.addr p{font-size:.87rem;color:var(--text-lt);line-height:1.7;max-width:34ch;margin:.8em auto 1.2rem}
+
+/* ==========================================================================
    AYAT
    ========================================================================== */
 #ayat{text-align:center;background:linear-gradient(180deg,rgba(214,225,231,0),rgba(214,225,231,.45) 45%,rgba(214,225,231,0))}
@@ -530,6 +545,23 @@ textarea{resize:vertical;min-height:96px}
   </div>
 </section>
 
+<!-- ============================ AMPLOP DIGITAL ============================ -->
+<section class="sheet" id="hadiah">
+  <div class="wrap">
+    <p class="eyebrow reveal">Tanda Kasih</p>
+    <div class="sec-title reveal"><span class="script">Wedding Gift</span></div>
+    <p class="lede reveal">Doa restu Bapak/Ibu/Saudara/i sudah lebih dari cukup bagi kami.
+      Bila berkenan memberi tanda kasih, dapat melalui:</p>
+    <div id="banks" class="reveal"></div>
+    <div class="addr reveal" id="addrBox">
+      <div class="orn"><i></i></div>
+      <p class="eyebrow">Kirim Hadiah</p>
+      <p id="giftAddr"></p>
+      <button class="btn" data-copy="giftAddr">Salin Alamat</button>
+    </div>
+  </div>
+</section>
+
 <!-- ================================== AYAT ================================ -->
 <section class="sheet" id="ayat">
   <div class="wrap">
@@ -667,6 +699,14 @@ const CONFIG = {
   youtubeId: "",
 
 
+  /* --- Amplop digital ------------------------------------------------------ */
+  /* Boleh lebih dari satu rekening, tinggal tambah baris.
+     Kosongkan array-nya kalau bagian ini mau disembunyikan lagi.             */
+  banks: [
+    { bank:"Bank Syariah Indonesia (BSI)", no:"7349578179", an:"Widiansyah Maulana" }
+  ],
+  giftAddress: "Jl. Tentara Pelajar No.19 RT 07 RW 01, Gedanganak, Ungaran Timur, Kabupaten Semarang 50519",
+
   /* --- Musik --------------------------------------------------------------- */
   /* Taruh berkas mp3 di folder assets/ dengan nama lagu.mp3 */
   musik: "assets/lagu.mp3",
@@ -785,6 +825,18 @@ const CONFIG = {
   }
 
   /* ---------- video ---------- */
+  /* ---------- amplop digital ---------- */
+  if(CONFIG.banks && CONFIG.banks.length){
+    html("#banks", CONFIG.banks.map((b,i)=>
+      `<div class="bank"><p class="bn">${b.bank}</p><p class="no" id="rek${i}">${b.no}</p>
+       <p class="an">a.n. ${b.an}</p>
+       <button class="btn" data-copy="rek${i}">Salin Nomor</button></div>`).join(""));
+  }else{
+    document.getElementById("hadiah").style.display = "none";
+  }
+  if(CONFIG.giftAddress) $("#giftAddr").textContent = CONFIG.giftAddress;
+  else $("#addrBox").remove();
+
   const vid = $("#vidBox");
   vid.addEventListener("click", ()=>{
     if(CONFIG.videoFile){
@@ -958,7 +1010,7 @@ const CONFIG = {
      ====================================================================== */
   const LABEL = { pembuka:"Salam", mempelai:"Mempelai", tanggal:"Tanggal", acara:"Acara",
                   kisah:"Kisah", kisah2:"Kisah", kisah3:"Kisah",
-                  galeri:"Galeri", video:"Video", ayat:"Ayat",
+                  galeri:"Galeri", video:"Video", hadiah:"Hadiah", ayat:"Ayat",
                   ucapan:"Ucapan", penutup:"Penutup" };
 
   const bagian = $$("section.sheet").filter(el => el.id && el.style.display !== "none");
