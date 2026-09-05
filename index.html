@@ -338,6 +338,22 @@ textarea{resize:vertical;min-height:96px}
 .wish p{font-size:.92rem;color:var(--text-lt);margin-top:.45em;line-height:1.7}
 .wish time{font-size:.6rem;letter-spacing:.12em;color:#A9A296;display:block;margin-top:.55em;text-transform:uppercase}
 
+/* Kartu tanda kasih: dipisah agar informasi pribadi tetap terasa pantas. */
+#hadiah{text-align:center;background:linear-gradient(180deg,rgba(214,225,231,0),rgba(214,225,231,.27) 42%,rgba(253,253,252,0))}
+.gift-note{max-width:36ch;margin:1.25rem auto 1.7rem;font-family:var(--ff-serif);font-size:1.04rem;line-height:1.78;color:var(--text-lt)}
+.gift-stack{display:grid;gap:14px;text-align:left;max-width:440px;margin-inline:auto}
+.gift-card{position:relative;overflow:hidden;border:1px solid var(--gold-lt);border-radius:22px 22px 10px 10px;padding:1.45rem 1.35rem 1.25rem;background:rgba(255,255,255,.72);box-shadow:0 12px 30px rgba(103,93,68,.06)}
+.gift-card::after{content:"";position:absolute;right:-34px;top:-34px;width:108px;height:108px;border:1px solid rgba(140,132,96,.24);border-radius:50%;pointer-events:none}
+.gift-kind{font-family:var(--ff-caps);font-size:.57rem;font-weight:500;letter-spacing:.24em;text-indent:.24em;text-transform:uppercase;color:var(--gold);display:block}
+.gift-card h3{font-family:var(--ff-serif);font-size:1.25rem;font-weight:500;color:var(--gold-dp);line-height:1.25;margin:.46rem 0 .45rem}
+.gift-card p{font-size:.88rem;color:var(--text-lt);line-height:1.65;max-width:38ch}
+.gift-account{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(188,180,149,.55)}
+.gift-account small{display:block;font-family:var(--ff-caps);font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-lt);margin-bottom:.35rem}
+.gift-account strong{display:block;font-family:var(--ff-serif);font-size:1.28rem;line-height:1;color:var(--gold-dp);font-variant-numeric:tabular-nums}
+.gift-copy{flex:none;border:1px solid var(--gold-lt);border-radius:999px;padding:.68em .92em;color:var(--gold-dp);font-family:var(--ff-caps);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.6);transition:background .3s,color .3s}
+.gift-copy:hover{background:var(--gold);color:#fff}
+.gift-sign{font-family:var(--ff-serif);font-style:italic;font-size:.95rem;color:var(--text-lt);margin-top:1.5rem}
+
 /* ==========================================================================
    PENUTUP & NAVIGASI
    ========================================================================== */
@@ -563,6 +579,32 @@ textarea{resize:vertical;min-height:96px}
       <button class="btn btn--fill" type="submit" style="justify-self:start">Kirim Ucapan</button>
     </form>
     <div class="wishes" id="wishes"></div>
+  </div>
+</section>
+
+<!-- ================================= HADIAH ================================ -->
+<section class="sheet" id="hadiah">
+  <div class="wrap">
+    <p class="eyebrow reveal">Tanda Kasih</p>
+    <div class="sec-title reveal"><span class="script">Wedding Gift</span></div>
+    <div class="orn reveal"><i></i></div>
+    <p class="gift-note reveal">Doa restu Bapak/Ibu/Saudara/i merupakan hadiah terindah bagi kami. Apabila berkenan mengirimkan tanda kasih, dapat disampaikan melalui:</p>
+    <div class="gift-stack">
+      <article class="gift-card reveal">
+        <span class="gift-kind">Kirim ke alamat</span>
+        <h3>Widiansyah Maulana</h3>
+        <p>Jl. Tentara Pelajar No. 19, 07/01, Gedanganak, Ungaran Timur, Kabupaten Semarang, 50519</p>
+      </article>
+      <article class="gift-card reveal">
+        <span class="gift-kind">Transfer bank</span>
+        <h3>Bank Syariah Indonesia</h3>
+        <div class="gift-account">
+          <div><small>a.n. Widiansyah Maulana</small><strong id="rekeningWidi">7349578179</strong></div>
+          <button class="gift-copy" type="button" data-copy="rekeningWidi">Salin</button>
+        </div>
+      </article>
+    </div>
+    <p class="gift-sign reveal">Terima kasih atas doa dan perhatian yang diberikan.</p>
   </div>
 </section>
 
@@ -959,7 +1001,7 @@ const CONFIG = {
   const LABEL = { pembuka:"Salam", mempelai:"Mempelai", tanggal:"Tanggal", acara:"Acara",
                   kisah:"Kisah", kisah2:"Kisah", kisah3:"Kisah",
                   galeri:"Galeri", video:"Video", ayat:"Ayat",
-                  ucapan:"Ucapan", penutup:"Penutup" };
+                  ucapan:"Ucapan", hadiah:"Hadiah", penutup:"Penutup" };
 
   const bagian = $$("section.sheet").filter(el => el.id && el.style.display !== "none");
   $("#nav").innerHTML = bagian.map(el =>
